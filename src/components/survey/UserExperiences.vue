@@ -26,9 +26,32 @@
   -.then( data => {} ) - Also takes in a function but with the actual data as the parameter that the response.json() yielded;
                   -And that is the place where we have access to the data itself 
                   -We can loop through and get the data
-  -Updating this.results = newResults will not work until you work with Arrow functions
+  -Updating  ( this.results = newResults ) will not work until you work with Arrow functions - This is because (this) keyword cannot be used in a callback function
 
 -->
+
+
+
+<!-- Loading Data When UserExperience Component Mounts
+============================================
+
+-Sending and Getting data works and that was the main objective of this course
+
+-But there is a small improvement we can add - We want to fetch all submitted experiences automatically without having to press Load Submitted Experiences button first 
+
+-We can trigger loadExperiences() not just when Load Submitted Experiences button i s clicked but when the entire component is loaded for the first time.
+
+-We can use mounted() hook which is triggered / called when this exact component gets mounted
+
+
+
+
+
+
+-->
+
+
+
 <template>
   <section>
     <base-card>
@@ -96,7 +119,11 @@ export default {
 
     }
 
-  }
+  },
+
+  mounted(){
+    this.loadExperiences()
+  } ,
 
 
 };
