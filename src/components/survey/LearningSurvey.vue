@@ -162,7 +162,7 @@ fetch() returns a Promise, hence we can use then(), catch() and async/ await the
 <script>
 
 import axios from 'axios';
-import VueAxios from 'vue-axios';
+// import VueAxios from 'vue-axios';
 
 export default {
 
