@@ -1,6 +1,18 @@
-<template>
-  <learning-survey @survey-submit="storeSurvey"></learning-survey>
+
+<!-- 
+
+- We are not going to pass the props and therefore removed
+
+-Backup
+ <learning-survey @survey-submit="storeSurvey"></learning-survey>
   <user-experiences :results="savedSurveyResults"></user-experiences>
+
+
+ -->
+
+<template>
+  <learning-survey></learning-survey>
+  <user-experiences></user-experiences>
 </template>
 
 <script>
@@ -12,7 +24,11 @@ export default {
     LearningSurvey,
     UserExperiences,
   },
-  data() {
+
+  /* ******COMMENTED BECAUSE WE ARE NOT GOING TO MANAGE DATA LOCALLY NOW
+  =======================================================
+  
+data() {
     return {
       savedSurveyResults: [],
     };
@@ -32,6 +48,8 @@ export default {
       console.log(surveyResult);
     },
   },
+  */
+
 };
 </script>
 
