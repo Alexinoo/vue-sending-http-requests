@@ -1,3 +1,51 @@
+
+<!-- SENDING A POST REQUEST TO STORE DATA
+===============================================================
+
+- We will use Firebase which is a complete Backend developed by Google that we can use to store data;
+
+- Easy to configure and get started
+
+-We have created vue-http-demo as our project and copied the URL
+
+      e.g. https://vue-http-demo-97b72-default-rtdb.firebaseio.com/
+
+-We need to add an identifier with a .json extension
+
+    e.g. https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys.json
+
+-Then use fetch() - which is a built-in Javascript method that we can use to send/ get data form a server;
+
+fetch() - method - Takes the following Parameters
+===================================
+
+    1. ) 1st parameter - fetch( url , )
+
+          -url - Specifies which url this request should be sent to
+
+    2. ) 2nd Parameter - Javascript Object where we can configure this request
+    
+          -This object  contains- { 
+            method : String, --HTTP VERBS   -POST/GET/DELETE/PATCH 
+            headers : {} ,                                  --Content-Type : application/json
+             body : {}                                        --JSON.stringified({})
+               } 
+
+         e.g. 
+
+              {  
+                method : 'POST' ,
+                headers : {
+                  'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify({ name : this.name ,  rating : this.rating  }) , 
+
+              } 
+
+-->
+
+
+
 <template>
   <section>
 
@@ -39,12 +87,13 @@
 
     </base-card>
 
-    
+
   </section>
 </template>
 
 <script>
 export default {
+
   data() {
     return {
       enteredName: '',
@@ -52,8 +101,11 @@ export default {
       invalidInput: false,
     };
   },
+
   emits: ['survey-submit'],
+
   methods: {
+
     submitSurvey() {
       if (this.enteredName === '' || !this.chosenRating) {
         this.invalidInput = true;
@@ -61,15 +113,26 @@ export default {
       }
       this.invalidInput = false;
 
-      this.$emit('survey-submit', {
-        userName: this.enteredName,
-        rating: this.chosenRating,
-      });
+      // No need to $emit since we are sending this data to the server
+
+      // this.$emit('survey-submit', {
+      //   userName: this.enteredName,
+      //   rating: this.chosenRating,
+      // });
+
+      fetch('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys.json' , {
+          method : 'POST',
+          headers : {
+            'Content-Type' : 'application/json'
+          } ,
+          body : JSON.stringify({ name: this.enteredName , rating: this.chosenRating }) ,
+      })
 
       this.enteredName = '';
       this.chosenRating = null;
     },
   },
+
 };
 </script>
 
