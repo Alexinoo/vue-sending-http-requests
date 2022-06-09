@@ -52,13 +52,28 @@
 
 -Add isLoading data property and initialize it to false
 
--Set it to true before fetching  false once the data is received
+-Set it to true before fetching ; Then set it to false once the data is received
 
 -Show a paragraph ( Loading... ) if isLoading data property is true ; Otherwise show the ul once the data is received
 
 -->
 
 
+<!-- Handling the No Data state
+============================================
+
+-There a re quite a number of ways we can use to check if we have data
+
+  1.) No Data - isLoading is false and the results is falsy and length ===0
+
+      e.g.  v-else-if="!isLoading && ( !results || results.length === 0)"
+
+
+  2.)  Show Data - isLoading is false and the (results) truthy and the length of the results >  1
+
+      e.g.  v-else-if="!isLoading && results && results.length > 0"
+
+-->
 
 <template>
   <section>
@@ -68,7 +83,9 @@
         <base-button @click="loadExperiences">Load Submitted Experiences</base-button>
       </div>
       <p v-if="isLoading">Loading...</p>
-      <ul v-else>
+
+      <p v-else-if="!isLoading && ( !results || results.length === 0)" >No stored experiences found. Start adding some</p>
+      <ul v-else-if="!isLoading && results && results.length > 0" >
         <survey-result v-for="result in results" :key="result.id" :name="result.name" :rating="result.rating">
         </survey-result>
       </ul>
