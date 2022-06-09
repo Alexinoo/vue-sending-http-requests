@@ -75,6 +75,27 @@
 
 -->
 
+
+<!-- Handling Technical / Browser-side Effects
+============================================
+- For us to test this let's manipulate the url and maybe remove the .json
+
+  e.g    fetch('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys')
+
+-If you reload we get an error from the console since the URL des not exist
+
+-Therefore , we need to use a catch block that handles any errors encoutered when the server is processing our request
+
+-We don't always have to log the error but we can show something to the user on the screen because they are not going to open the developer tools
+
+-So let's add isError data property and set it to null initially;
+
+-If there is an error - We can set  isError to some String message that we want to output to the screen
+
+-Then use v-if / v-else-if to check whether isLoading is false and isError is true and output the message to the user
+
+-->
+
 <template>
   <section>
     <base-card>
@@ -84,8 +105,12 @@
       </div>
       <p v-if="isLoading">Loading...</p>
 
-      <p v-else-if="!isLoading && ( !results || results.length === 0)" >No stored experiences found. Start adding some</p>
-      <ul v-else-if="!isLoading && results && results.length > 0" >
+      <p v-else-if="!isLoading && isError"> {{ isError }}</p>
+
+      <p v-else-if="!isLoading && ( !results || results.length === 0)">No stored experiences found. Start adding some
+      </p>
+
+      <ul v-else>
         <survey-result v-for="result in results" :key="result.id" :name="result.name" :rating="result.rating">
         </survey-result>
       </ul>
@@ -107,6 +132,7 @@ export default {
     return {
       results : [] ,
       isLoading : false,
+      isError  :null ,
     }
   },
 
@@ -114,7 +140,8 @@ export default {
 
     loadExperiences(){
     
-        this.loading = true
+      this.isLoading = true
+      this.isError = null
 
         fetch('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys.json')
         .then(response =>{
@@ -127,7 +154,7 @@ export default {
         })
         .then( data => {
 
-          this.loading = false
+          this.isLoading = false
           
           const newResults = [];
 
@@ -142,6 +169,14 @@ export default {
 
           this.results = newResults
           
+        })
+        .catch( error => {
+
+          this.isLoading = false
+
+          this.isError = 'Failed to fetch data - please try again later';
+
+          console.log(error);
         } )
 
     }
