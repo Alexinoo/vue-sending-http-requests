@@ -113,6 +113,33 @@ fetch() returns a Promise, hence we can use then(), catch() and async/ await the
 -->
 
 
+<!-- HANDLING ERROR RESPONSES
+
+-We can also check if there is any error when submitting data.
+
+- For us to test this let's manipulate the url and maybe remove the .json - Firebase will not be able to submit this POST request to this resource 
+
+-We use catch () block to handle browser /technical side errors 
+-Let's say network errors or such cases
+e.g. 
+
+  .catch( error => {
+        console.log(error);
+        this.isError =  error.message
+      } )
+
+  -However errors from the server side are handled at the response level by checking the statusCode and statusText and then throw new Error('message) which is automatically passed to the catch method
+
+  -Suppose we omit to JSON.stringify and send our body as an object
+       body : { name: this.enteredName , rating: this.chosenRating } ,
+
+  -We can handle this error at the response level by checking statusCode /statusText;
+
+  -If there is one we  throw new Error('message) - this message is then passed to the catch method and we can access it by just using      error.message
+
+-->
+
+
 
 <template>
   <section>
@@ -148,6 +175,8 @@ fetch() returns a Promise, hence we can use then(), catch() and async/ await the
         <p
           v-if="invalidInput"
         >One or more input fields are invalid. Please check your provided data.</p>
+
+        <p v-if="isError"> {{ isError }}</p>
         <div>
           <base-button>Submit</base-button>
         </div>
@@ -161,7 +190,9 @@ fetch() returns a Promise, hence we can use then(), catch() and async/ await the
 
 <script>
 
-import axios from 'axios';
+
+//Uncomment If you want to use axios instead
+// import axios from 'axios';
 // import VueAxios from 'vue-axios';
 
 export default {
@@ -171,6 +202,7 @@ export default {
       enteredName: '',
       chosenRating: null,
       invalidInput: false,
+      isError : null,
     };
   },
 
@@ -192,20 +224,33 @@ export default {
       //   rating: this.chosenRating,
       // });
 
-      // fetch('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys.json' , {
-      //     method : 'POST',
-      //     headers : {
-      //       'Content-Type' : 'application/json'
-      //     } ,
-      //     body : JSON.stringify({ name: this.enteredName , rating: this.chosenRating }) ,
-      // })
+      this.isError = null;
+
+      fetch('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys.json' , {
+          method : 'POST',
+          headers : {
+            'Content-Type' : 'application/json'
+          } ,
+          body : JSON.stringify({ name: this.enteredName , rating: this.chosenRating }) ,
+      })
+      .then( response => {
+
+        if( response.status !== 200 && response.statusText !== 'OK' ){
+          throw new Error('Could not submit data')
+        }
+
+      } )
+      .catch( error => {
+        console.log(error);
+        this.isError =  error.message
+      } )
 
 
       // USING AXIOS
-      axios.post('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys.json', {
-        name: this.enteredName,
-        rating: this.chosenRating,
-      });
+      // axios.post('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys.json', {
+      //   name: this.enteredName,
+      //   rating: this.chosenRating,
+      // });
 
       this.enteredName = '';
       this.chosenRating = null;
