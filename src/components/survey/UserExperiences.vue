@@ -78,11 +78,11 @@
 
 <!-- Handling Technical / Browser-side Effects
 ============================================
-- For us to test this let's manipulate the url and maybe remove the .json
+- For us to test this let's manipulate the url and maybe remove the .json - Firebase will not be able to fetch this request from this resource
 
   e.g    fetch('https://vue-http-demo-97b72-default-rtdb.firebaseio.com/surveys')
 
--If you reload we get an error from the console since the URL des not exist
+-If you reload we get an error from the console since the URL does not exist
 
 -Therefore , we need to use a catch block that handles any errors encoutered when the server is processing our request
 
@@ -90,7 +90,7 @@
 
 -So let's add isError data property and set it to null initially;
 
--If there is an error - We can set  isError to some String message that we want to output to the screen
+-If there is an error - We can set  isError to some String message that we want to output to the screen for the user
 
 -Then use v-if / v-else-if to check whether isLoading is false and isError is true and output the message to the user
 
